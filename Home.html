@@ -15,9 +15,10 @@
 </head>
 
 <body>
+  <div id="liveAlertPlaceholder"></div>
   <!-- modal -->
    <!-- login modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+<div class="modal fade" id="login-model" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -57,10 +58,14 @@
           <a class="nav-link" href="#">Profile</a>
         </li>
       </ul>
-      <div class="d-flex gap-2">
-        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Login</button>
-        <button type="button" class="btn btn-outline-secondary">Register</button>
+      <div id="lodded-div"  class="d-flex gap-2">
+        <button  id="login-button" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#login-model">Login</button>
+        <button  id="register-button"type="button" class="btn btn-outline-secondary">Register</button>
+
       </div>
+      <div id ="logout-div" class="d-flex gap-2">
+        <button onclick="logout()"  id="logout-button" type="button" class="btn btn-outline-secondary">Logout</button>
+        </div>
     </div>
   </div>
 

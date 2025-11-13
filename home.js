@@ -1,86 +1,128 @@
 
+ setui();
+function getPosts() {
+  axios.get("https://tarmeezacademy.com/api/v1/posts")
+    .then(response => {
+      const posts = response.data.data;
+      const container = document.getElementById("posts");
+      container.innerHTML = "";
 
-axios.get("https://tarmeezacademy.com/api/v1/posts")
-  .then(response => {
-    const posts = response.data.data;
-    const container = document.getElementById("posts");
-    container.innerHTML = "";
+      for (let post of posts) {
 
-    for (let post of posts) {
-      let postImage = "";
-      if (post.image) {
-        if (typeof post.image === "string") {
-          postImage = `<img src="${post.image}" alt="post image" class="card-img-top mb-3">`;
-        } else if (typeof post.image === "object" && post.image.url) {
-          postImage = `<img src="${post.image.url}" alt="post image" class="card-img-top mb-3">`;
+        // post image
+        let postImage = "";
+        if (post.image) {
+          postImage = `<img src="${post.image}" class="card-img-top mb-3" />`;
         }
-      }
 
-      let profileImage = "";
-      if (post.author.profile_image) {
-        if (typeof post.author.profile_image === "string") {
-          profileImage = post.author.profile_image;
-        } else if (typeof post.author.profile_image === "object" && post.author.profile_image.url) {
-          profileImage = post.author.profile_image.url;
-        }
-      }
+        // profile image
+       let profileImage = post.author.profile_image
+  ? post.author.profile_image
+  : './images/imgprofile.png';
 
-      const content = `
-        <div class="card post-card my-3">
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <img src="${profileImage}" alt="profile" class="profile-img me-2" style="width:40px;height:40px;border-radius:50%;">
-              <h5 class="card-title mb-0">${post.author.username}</h5>
-            </div>
-            <p class="card-text">${post.body || "No content"}</p>
-            ${postImage}
-            <div class="d-flex justify-content-between align-items-center">
-              <a href="#" class="btn btn-primary btn-sm">Like</a>
-              <div class="d-flex align-items-center gap-1">
-                <span class="text-muted">${post.comments_count || 0} Comments</span>
-               
-               
+
+        const content = `
+          <div class="card my-3">
+            <div class="card-body">
+
+              <!-- Profile Section -->
+              <div class="d-flex align-items-center mb-3">
+                <img src="${profileImage}" 
+                     style="width:40px;height:40px;border-radius:50%;"
+                     class="me-2 border" />
+                <h5 class="mb-0">${post.author.username}</h5>
               </div>
-            
-<div class="d-flex align-items-center gap-1">
-                <span class="text-muted">${ ' CRAETED AT:       '+post.author.created_at}</span>
-               
-               
+
+              <!-- Post Body -->
+              <p>${post.body || "No content"}</p>
+
+              <!-- Post Image -->
+              ${postImage}
+
+              <!-- Footer -->
+              <div class="d-flex justify-content-between text-muted mt-3">
+                <span>${post.comments_count} Comments</span>
+                <span>Created: ${post.created_at}</span>
               </div>
+
             </div>
           </div>
-        </div>
-      `;
+        `;
 
-      const fragment = document.createDocumentFragment();
-      const div = document.createElement("div");
-      div.innerHTML = content;
-      fragment.appendChild(div.firstElementChild);
-      container.appendChild(fragment);
-    }
-  })
-  .catch(error => {
-    console.error("Fetch error:", error);
-    document.getElementById("posts").innerHTML = "<p>حدث خطأ أثناء جلب البوستات.</p>";
-  });
- function buttonLoginClick() {
+        container.innerHTML += content;
+      }
+    })
+    .catch(error => {
+      console.error("Fetch error:", error);
+      document.getElementById("posts").innerHTML =
+        "<p class='text-danger'>حدث خطأ أثناء جلب البوستات.</p>";
+    });
+}
+
+// Call posts on page load
+getPosts();
+
+
+// =====================
+// Login FUNCTION
+// =====================
+
+function buttonLoginClick() {
   const username = document.getElementById("username-input").value;
   const password = document.getElementById("password-input").value;
 
-  const params = {
-    username: username,
-    password: password
-  };
+  axios.post("https://tarmeezacademy.com/api/v1/login", {
+    username,
+    password
+  })
+  .then(response => {
 
-  axios.post("https://tarmeezacademy.com/api/v1/login", params)
-    .then(response => {
-      console.log("Login successful:", response.data);
-      // هنا ممكن تحفظي التوكن أو تعملي redirect
-      // مثال:
-      // localStorage.setItem("token", response.data.token);
-    })
-    .catch(error => {
-      console.error("Login failed:", error.response ? error.response.data : error);
-      alert("فشل تسجيل الدخول، تحقق من بياناتك");
-    });
+    localStorage.setItem("token", response.data.token);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
+
+    const modal = document.getElementById("login-model");
+    const modalInstance = bootstrap.Modal.getInstance(modal);
+
+    if (modalInstance) modalInstance.hide();
+
+    
+    setTimeout(() => {
+       setui();
+      alert("Login Successful!");
+    }, 300);
+
+
+  })
+  .catch(error => {
+    console.error("Login failed:", error);
+    alert("فشل تسجيل الدخول");
+  });
+}
+function setui(){
+  const token=localStorage.getItem("token");
+  const loginbutton=document.getElementById("lodded-div" );
+  
+  const logoutbutton =document.getElementById("logout-div");
+
+if(token==null)
+{
+logoutbutton.style.setProperty("display","none","important")
+loginbutton.style.setProperty("display","block","important")
+
+}
+else{
+loginbutton.style.setProperty("display","none","important")
+logoutbutton.style.setProperty("display","block","important")
+}
+}
+function logout(){
+
+localStorage.removeItem("token");
+localStorage.removeItem("user");
+setui();
+alert("logged out successfully")
+
+
+
+
 }
