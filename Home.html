@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post Hub</title>
-
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
   <!-- Custom CSS -->
@@ -15,75 +14,95 @@
 </head>
 
 <body>
-  <div id="liveAlertPlaceholder"></div>
-  <!-- modal -->
-   <!-- login modal -->
-<div class="modal fade" id="login-model" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">LOGIN</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Username:</label>
-            <input type="text" class="form-control" id="username-input">
-          </div>
-          <div class="mb-3">
-            <label for="message-text" class="col-form-label">Password:</label>
-          <input type="password" class="form-control" id="password-input">
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="buttonLoginClick()">login</button>
-      </div>
-    </div>
-  </div>
-</div>
+  <div id="alerts" class="position-fixed top-0 end-0 m-3"></div>
+
   <!-- Navbar -->
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <ul class="nav nav-pills mb-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">PostHub</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Profile</a>
-        </li>
+        <li class="nav-item"><a class="nav-link active" href="#">PostHub</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
       </ul>
-      <div id="lodded-div"  class="d-flex gap-2">
-        <button  id="login-button" type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#login-model">Login</button>
-        <button  id="register-button"type="button" class="btn btn-outline-secondary">Register</button>
-
+      <div id="logged-out-div" class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+          data-bs-target="#login-modal">Login</button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+          data-bs-target="#register-modal">Register</button>
       </div>
-      <div id ="logout-div" class="d-flex gap-2">
-        <button onclick="logout()"  id="logout-button" type="button" class="btn btn-outline-secondary">Logout</button>
-        </div>
+      <div id="logout-div" class="d-flex gap-2" style="display:none;">
+        <button onclick="logout()" class="btn btn-outline-secondary">Logout</button>
+      </div>
     </div>
   </div>
 
   <!-- Hero Section -->
-  <div class="hero-section d-flex flex-column justify-content-center align-items-center text-center">
+  <div class="hero-section d-flex flex-column justify-content-center align-items-center text-center my-4">
     <h1>Welcome to Post Hub</h1>
     <p>Connect, share posts, comment, and enjoy your social space.</p>
-    <div class="mt-3">
-      <button class="btn btn-primary me-2">Get Started</button>
-      <button class="btn btn-outline-light">Learn More</button>
-    </div>
   </div>
 
   <!-- Posts Container -->
   <div class="container my-5">
     <div class="row justify-content-center">
       <div class="col-md-6" id="posts">
-        
+        <!-- JS adds posts here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Modal -->
+  <div class="modal fade" id="login-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Login</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="username-input" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username-input">
+          </div>
+          <div class="mb-3">
+            <label for="password-input" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password-input">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="buttonLoginClick()">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal fade" id="register-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Register</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="register-username-input" class="form-label">Username</label>
+            <input type="text" class="form-control" id="register-username-input">
+          </div>
+          <div class="mb-3">
+            <label for="register-name-input" class="form-label">Name</label>
+            <input type="text" class="form-control" id="register-name-input">
+          </div>
+          <div class="mb-3">
+            <label for="register-password-input" class="form-label">Password</label>
+            <input type="password" class="form-control" id="register-password-input">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="buttonRegisterClick()">Register</button>
+        </div>
       </div>
     </div>
   </div>
